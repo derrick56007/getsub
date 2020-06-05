@@ -1,0 +1,7 @@
+bs4
+srt
+lxml
+numpy
+progress
+requests
+webrtcvad
