@@ -71,9 +71,11 @@ class GetSub:
 		best_delay = 0
 
 		rows = []
+
+		delay_range_len = delay_range_end - delay_range_start
 		
-		with Bar('Finding Best Delay', max=(delay_range_end - delay_range_start)) as bar:
-			for delay_by_frames in range(delay_range_start, delay_range_end):
+		with Bar('Finding Best Delay', max=delay_range_len) as bar:
+			for i, delay_by_frames in enumerate(range(delay_range_start, delay_range_end)):
 				tmp_bin_arr1 = copy.copy(bin_arr1)
 				tmp_bin_arr2 = copy.copy(bin_arr2)
 				
@@ -93,6 +95,12 @@ class GetSub:
 				rows.append([delay_by_frames * self.vad.frame_duration_ms * 0.001, tmp_err])
 
 				bar.next()
+
+				percent_change = (tmp_err - err) / err
+
+				if percent_change > 0.1:
+					print('stopping early at ', str(float(i) / delay_range_len) + '%')
+					break
 
 		df = pd.DataFrame(rows, columns=["delay_in_seconds", "MAE"])
 		df.set_index("delay_in_seconds", inplace=True)
