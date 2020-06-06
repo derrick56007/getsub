@@ -5,6 +5,7 @@ import codecs
 import numpy as np
 import srt
 import subprocess
+import pandas as pd
 
 from utils import mkdir
 from ntpath import basename
@@ -68,6 +69,8 @@ class GetSub:
 		
 		err = math.inf
 		best_delay = 0
+
+		rows = []
 		
 		with Bar('Finding Best Delay', max=(delay_range_end - delay_range_start)) as bar:
 			for delay_by_frames in range(delay_range_start, delay_range_end):
@@ -87,22 +90,30 @@ class GetSub:
 					err = tmp_err
 					best_delay = delay_by_frames
 
+				rows.append([delay_by_frames * self.vad.frame_duration_ms * 0.001, tmp_err])
+
 				bar.next()
+
+		df = pd.DataFrame(rows, columns=["day_in_seconds", "MAE"])
 		
-		return best_delay * self.vad.frame_duration_ms
+		return best_delay * self.vad.frame_duration_ms, df
 		
 	def align_subs(self, vid_file_path, srt_path):
 		bin_arr1 = list(self.vad.detect(vid_file_path))
 		bin_arr2, delay_range_start, delay_range_end = self.binary_array_from_srt(srt_path)
 		
-		best_delay_ms = self.find_best_delay_milliseconds(bin_arr1, bin_arr2, delay_range_start, delay_range_end)
+		best_delay_ms, df = self.find_best_delay_milliseconds(bin_arr1, bin_arr2, delay_range_start, delay_range_end)
 		best_delay_sec = best_delay_ms * 0.001
 		print("best delay:", best_delay_sec)
 
 		out_dir = os.path.dirname(vid_file_path)
 		mkdir(out_dir)
 
-		out_path = os.path.join(out_dir, ".".join(basename(srt_path).split(".")[:-1]) + "_synced.srt")
+		original_name = ".".join(basename(srt_path).split(".")[:-1])
+
+		df.to_csv(os.path.join(out_dir, original_name + "_error.csv"))
+
+		out_path = os.path.join(out_dir, original_name + "_synced.srt")
 
 		subprocess.call(["srt", "fixed-timeshift", "--input", srt_path, "--output", out_path, "--seconds", str(best_delay_sec)])
 		return out_path
