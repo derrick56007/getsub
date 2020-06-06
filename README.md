@@ -8,6 +8,9 @@ Introduction
 
 Download subtitles in any language and sync automatically using Voice Activity Detection
 
+Features
+--------
+
 Requirements
 ------------
 
