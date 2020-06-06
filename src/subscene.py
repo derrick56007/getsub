@@ -42,25 +42,40 @@ def search_with_filename(video_filename, language):
             nr = requests.get(server_addr + sub_url)
             sub_soup = bs4.BeautifulSoup(nr.content, "lxml")
             download_link = sub_soup.find("div", class_="download").find("a", class_="button")["href"]
-            break
             
-    download_link = server_addr + download_link
-    print('subtitle link:', sub_url)
+            download_link = server_addr + download_link
+            print('subtitle link:', sub_url)
 
-    r = requests.get(download_link)
-    with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-        for infofile in z.infolist()[:1]:
-            z.extract(infofile)
-            sub_ext = os.path.splitext(infofile.filename)[1]
-            vid_name = os.path.splitext(video_filename)[0]
-            print(infofile.filename, vid_name+sub_ext)
-            
-            out_dir = "temp/"
+            r = requests.get(download_link)
+            with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+                for infofile in z.infolist()[:1]:
+                    z.extract(infofile)
+                    sub_ext = os.path.splitext(infofile.filename)[1]
+                    vid_name = os.path.splitext(video_filename)[0]
+                    print(infofile.filename, vid_name+sub_ext)
+                    
+                    out_dir = "temp/"
 
-            mkdir(out_dir)
+                    mkdir(out_dir)
 
-            out_path = out_dir + basename(vid_name) + sub_ext
-            
-            os.rename(infofile.filename, out_path)
+                    out_path = out_dir + basename(vid_name) + sub_ext
+                    
+                    os.rename(infofile.filename, out_path)
 
-            return out_path
+                    try:
+                        srt_file = codecs.open(srt_path, 'r', encoding='utf-8')
+                        srt_string = srt_file.read()
+                        srt_file.close()
+
+                        subs = list(srt.parse(srt_string))
+
+                        return out_path
+                    except:
+                        pass
+
+    return None
+
+                        
+
+
+
