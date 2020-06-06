@@ -1,6 +1,5 @@
 # from https://github.com/rnbguy/subscene-dl
 
-import pprint
 import requests
 import bs4
 import zipfile
@@ -8,6 +7,8 @@ import io
 import os
 import sys
 import re
+import srt
+import codecs
 
 from ntpath import basename
 from utils import mkdir
@@ -73,8 +74,8 @@ def search_with_filename(video_filename, language):
                             subs = list(srt.parse(srt_string))
 
                             return out_path, encoding
-                        except:
-                            pass
+                        except BaseException as error:
+                            print('An exception occurred: {}'.format(error))
 
     sys.exit("no subs found")
 
