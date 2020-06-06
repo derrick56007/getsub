@@ -6,14 +6,18 @@ A small tool to download subtitles in any language and sync automatically using 
 
 - Docker Hub: https://hub.docker.com/r/derrick56007/getsub
 
-## Usage 
+## Requirements
 
-First pull docker image
+- Docker: https://docs.docker.com/get-docker/
+
+## Install
+
 ```
 docker pull derrick56007/getsub:latest
 ```
 
-Then run on movie or tv show of your choosing
+## Usage 
+
 ```
 docker run -tiv /$VIDEO_DIR:/files derrick56007/getsub:latest /files/$VIDEO_FILE.mp4 $LANG
 ```
@@ -21,6 +25,5 @@ docker run -tiv /$VIDEO_DIR:/files derrick56007/getsub:latest /files/$VIDEO_FILE
 ## Example
 
 ```
-docker pull derrick56007/getsub:latest
 docker run -tiv /Users/derrick/videos:/files derrick56007/getsub:latest /files/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
 ```
