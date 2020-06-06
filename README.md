@@ -1,3 +1,5 @@
+![Docker Image CI](https://github.com/Derrick56007/getsub/workflows/Docker%20Image%20CI/badge.svg)
+
 usage 
 
 docker run -tiv /host/directory:/files derrick56007/getsub:latest /files/video.mp4 language
