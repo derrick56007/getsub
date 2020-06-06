@@ -2,10 +2,21 @@
 
 ![Docker Image CI](https://github.com/Derrick56007/getsub/workflows/Docker%20Image%20CI/badge.svg)
 
+## Introduction
+
+A small tool to download subtitles and sync automatically
+
+- Docker Hub: https://hub.docker.com/r/derrick56007/getsub
+
 ## Usage 
 
+First pull docker image
 ```
 docker pull derrick56007/getsub:latest
+```
+
+Then run on movie or tv show of your choosing
+```
 docker run -tiv /$VIDEO_DIR:/files derrick56007/getsub:latest /files/$VIDEO_FILE.mp4 $LANG
 ```
 
