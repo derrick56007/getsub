@@ -1,6 +1,6 @@
 # [derrick56007/GetSub](https://github.com/Derrick56007/getsub)
 
-![master](https://github.com/Derrick56007/getsub/workflows/Docker%20Image%20CI/badge.svg)
+![master](https://github.com/Derrick56007/getsub/workflows/master/badge.svg)
 
 ## Introduction
 
