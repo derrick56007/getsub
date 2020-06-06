@@ -11,6 +11,8 @@ Download subtitles in any language and sync automatically using Voice Activity D
 Features
 --------
 
+- Supports 60 languages! The official list can be found [here](http://www.opensubtitles.org/addons/export_languages.php)
+
 Requirements
 ------------
 
