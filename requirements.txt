@@ -1,8 +1,5 @@
-bs4
 srt
-lxml
 numpy
 pandas
 progress
-requests
 webrtcvad

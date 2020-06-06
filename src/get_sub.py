@@ -10,7 +10,7 @@ import pandas as pd
 from utils import mkdir
 from ntpath import basename
 from voice_detector import VoiceDetector
-from subscene import search_with_filename
+# from subscene import search_with_filename
 from progress.bar import Bar
 
 class GetSub:
@@ -27,12 +27,20 @@ class GetSub:
 		ms = float(td.seconds) * 1000.0 + float(td.microseconds) * 0.001
 		return int(ms / self.vad.frame_duration_ms)
 
-	def binary_array_from_srt(self, srt_path, encoding):
-		srt_file = codecs.open(srt_path, 'r', encoding=encoding)
-		srt_string = srt_file.read()
-		srt_file.close()
+	def binary_array_from_srt(self, srt_path):
+		common_encodings = ['utf-8', 'utf-16', 'cp1252']
 
-		subs = list(srt.parse(srt_string))
+		for encoding in common_encodings:
+			try:
+				srt_file = codecs.open(srt_path, 'r', encoding=encoding)
+				srt_string = srt_file.read()
+				srt_file.close()
+
+				subs = list(srt.parse(srt_string))
+
+				break
+			except BaseException as error:
+				print('An exception occurred: {}'.format(error))
 		
 		start_end_pairs = [(self.timedelta_to_frame(sub.start), self.timedelta_to_frame(sub.end)) for sub in subs]
 
@@ -51,6 +59,8 @@ class GetSub:
 
 		# TODO
 		five_second_delay = int(5 * 1000 / self.vad.frame_duration_ms)
+
+		# set max delay to 5% of video
 		max_delay = max(five_second_delay, int(len(bin_array) * 0.05))
 
 		return bin_array, -first_sub_frame, max_delay
@@ -107,34 +117,38 @@ class GetSub:
 		df.set_index("delay_in_seconds", inplace=True)
 		
 		return best_delay * self.vad.frame_duration_ms, df
-		
-	def align_subs(self, vid_file_path, srt_path, encoding):
+
+	def download(self, vid_file_path, language):
+
+		out_dir = os.path.dirname(vid_file_path)
+		temp_dir = "temp/"
+
+		mkdir(out_dir)
+		mkdir(temp_dir)
+
+		subprocess.call(["python", "OpenSubtitlesDownload.py", "--cli",  "--auto", vid_file_path, "--output", temp_dir, "--lang", language])
+
+
+		original_name = ".".join(basename(vid_file_path).split(".")[:-1])
+		srt_path = os.path.join(temp_dir, original_name + ".srt")
+
+		out_path_unsynced = os.path.join(out_dir, original_name + "_unsynced.srt")
+		subprocess.call(["srt", "fixed-timeshift", "--input", srt_path, "--output", out_path_unsynced, "--seconds", "0"])
+
+		print('downloaded subs:', srt_path)
+
 		bin_arr1 = list(self.vad.detect(vid_file_path))
-		bin_arr2, delay_range_start, delay_range_end = self.binary_array_from_srt(srt_path, encoding)
+		bin_arr2, delay_range_start, delay_range_end = self.binary_array_from_srt(srt_path)
 		
 		best_delay_ms, df = self.find_best_delay_milliseconds(bin_arr1, bin_arr2, delay_range_start, delay_range_end)
 		best_delay_sec = best_delay_ms * 0.001
 		print("best delay:", best_delay_sec)
 
-		out_dir = os.path.dirname(vid_file_path)
-		mkdir(out_dir)
-
-		original_name = ".".join(basename(srt_path).split(".")[:-1])
-
 		df.to_csv(os.path.join(out_dir, original_name + "_error.csv"))
-
 		out_path = os.path.join(out_dir, original_name + "_synced.srt")
-
+		
 		subprocess.call(["srt", "fixed-timeshift", "--input", srt_path, "--output", out_path, "--seconds", str(best_delay_sec)])
-		return out_path
-
-	def download(self, vid_file_path, language):
-		srt_path, encoding = search_with_filename(vid_file_path, language)
-
-		print('downloaded subs:', srt_path)
-
-		out_path = self.align_subs(vid_file_path, srt_path, encoding)
-
+		
 		print('output aligned subs to:', out_path)
 
 
