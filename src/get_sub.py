@@ -27,8 +27,8 @@ class GetSub:
 		ms = float(td.seconds) * 1000.0 + float(td.microseconds) * 0.001
 		return int(ms / self.vad.frame_duration_ms)
 
-	def binary_array_from_srt(self, srt_path):
-		srt_file = codecs.open(srt_path, 'r', encoding='utf-8')
+	def binary_array_from_srt(self, srt_path, encoding):
+		srt_file = codecs.open(srt_path, 'r', encoding=encoding)
 		srt_string = srt_file.read()
 		srt_file.close()
 
@@ -108,9 +108,9 @@ class GetSub:
 		
 		return best_delay * self.vad.frame_duration_ms, df
 		
-	def align_subs(self, vid_file_path, srt_path):
+	def align_subs(self, vid_file_path, srt_path, encoding):
 		bin_arr1 = list(self.vad.detect(vid_file_path))
-		bin_arr2, delay_range_start, delay_range_end = self.binary_array_from_srt(srt_path)
+		bin_arr2, delay_range_start, delay_range_end = self.binary_array_from_srt(srt_path, encoding)
 		
 		best_delay_ms, df = self.find_best_delay_milliseconds(bin_arr1, bin_arr2, delay_range_start, delay_range_end)
 		best_delay_sec = best_delay_ms * 0.001
@@ -129,11 +129,11 @@ class GetSub:
 		return out_path
 
 	def download(self, vid_file_path, language):
-		srt_path = search_with_filename(vid_file_path, language)
+		srt_path, encoding = search_with_filename(vid_file_path, language)
 
 		print('downloaded subs:', srt_path)
 
-		out_path = self.align_subs(vid_file_path, srt_path)
+		out_path = self.align_subs(vid_file_path, srt_path, encoding)
 
 		print('output aligned subs to:', out_path)
 

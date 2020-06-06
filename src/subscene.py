@@ -62,18 +62,21 @@ def search_with_filename(video_filename, language):
                     
                     os.rename(infofile.filename, out_path)
 
-                    try:
-                        srt_file = codecs.open(srt_path, 'r', encoding='utf-8')
-                        srt_string = srt_file.read()
-                        srt_file.close()
+                    common_encodings = ['utf-8', 'utf-16', 'cp1252']
 
-                        subs = list(srt.parse(srt_string))
+                    for encoding in common_encodings:
+                        try:
+                            srt_file = codecs.open(srt_path, 'r', encoding=encoding)
+                            srt_string = srt_file.read()
+                            srt_file.close()
 
-                        return out_path
-                    except:
-                        pass
+                            subs = list(srt.parse(srt_string))
 
-    return None
+                            return out_path, encoding
+                        except:
+                            pass
+
+    sys.exit("no subs found")
 
                         
 
