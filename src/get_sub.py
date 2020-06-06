@@ -100,7 +100,7 @@ class GetSub:
 
 				if percent_change > 0.1:
 					print('')
-					print('stopping early at ', str(float(i) / delay_range_len) + '%')
+					print('stopping early at ', str(float(i) / delay_range_len * 100.0) + '%')
 					break
 
 		df = pd.DataFrame(rows, columns=["delay_in_seconds", "MAE"])
