@@ -94,7 +94,8 @@ class GetSub:
 
 				bar.next()
 
-		df = pd.DataFrame(rows, columns=["day_in_seconds", "MAE"])
+		df = pd.DataFrame(rows, columns=["delay_in_seconds", "MAE"])
+		df.set_index("delay_in_seconds", inplace=True)
 		
 		return best_delay * self.vad.frame_duration_ms, df
 		
