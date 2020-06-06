@@ -67,7 +67,7 @@ def search_with_filename(video_filename, language):
 
                     for encoding in common_encodings:
                         try:
-                            srt_file = codecs.open(srt_path, 'r', encoding=encoding)
+                            srt_file = codecs.open(out_path, 'r', encoding=encoding)
                             srt_string = srt_file.read()
                             srt_file.close()
 
