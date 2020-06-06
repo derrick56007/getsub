@@ -99,6 +99,7 @@ class GetSub:
 				percent_change = (tmp_err - err) / err
 
 				if percent_change > 0.1:
+					print('')
 					print('stopping early at ', str(float(i) / delay_range_len) + '%')
 					break
 
