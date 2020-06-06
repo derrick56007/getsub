@@ -2,9 +2,7 @@
 
 ![master](https://github.com/Derrick56007/getsub/workflows/master/badge.svg)
 
-A small tool to download subtitles in any language and sync automatically using Voice Activity Detection
-
-- Docker Hub: https://hub.docker.com/r/derrick56007/getsub
+Download subtitles in any language and sync automatically using Voice Activity Detection
 
 ## Requirements
 
