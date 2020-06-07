@@ -6,7 +6,9 @@ GetSub
 Introduction
 ------------
 
-Download subtitles in any language and sync automatically using Voice Activity Detection
+**GetSub** is a tool written in Python to help you **download subtitles in any language** and **sync automatically** using Voice Activity Detection. 
+
+Subtitle search utilizes the [OpenSubtitleDownload.py](https://github.com/emericg/OpenSubtitlesDownload) script written by [emericg](https://github.com/emericg) to precisly **identifying your video files** by computing unique movie hash sums. The subtitles search and download server is [opensubtitles.org](https://www.opensubtitles.org). 
 
 Features
 --------
