@@ -22,6 +22,10 @@ Requirements
 - gcc
 - pip
 
+or if Docker is prefered:
+
+- Docker: https://docs.docker.com/get-docker/
+
 Install
 --------------
 
@@ -33,29 +37,7 @@ pip install -r requirements.txt
 
 ```
 
-Usage
-------------
-
-```
-python run.py files/$VIDEO_FILE.mp4 $LANG
-```
-
-Example
---------------
-
-```
-python run.py /Users/derrick/videos/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
-```
-GetSub Docker
-=============
-
-Requirements
-------------
-
-- Docker: https://docs.docker.com/get-docker/
-
-Install
---------------
+Docker:
 
 ```
 docker pull derrick56007/getsub:latest
@@ -65,11 +47,23 @@ Usage
 ------------
 
 ```
+python run.py files/$VIDEO_FILE.mp4 $LANG
+```
+
+Docker:
+
+```
 docker run -tiv /$VIDEO_DIR:/files derrick56007/getsub:latest /files/$VIDEO_FILE.mp4 $LANG
 ```
 
 Example
 --------------
+
+```
+python run.py /Users/derrick/videos/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
+```
+
+Docker:
 
 ```
 docker run -tiv /Users/derrick/videos:/files derrick56007/getsub:latest /files/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
