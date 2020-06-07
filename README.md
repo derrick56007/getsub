@@ -12,7 +12,7 @@ Features
 --------
 
 - Supports 60 languages! The official list can be found [here](http://www.opensubtitles.org/addons/export_languages.php)
-- Available as Docker image
+- Available as Docker [image](https://hub.docker.com/r/derrick56007/getsub)
 
 Requirements
 ------------
