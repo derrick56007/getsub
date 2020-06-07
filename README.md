@@ -12,28 +12,62 @@ Features
 --------
 
 - Supports 60 languages! The official list can be found [here](http://www.opensubtitles.org/addons/export_languages.php)
+- Available as Docker image
 
 Requirements
 ------------
 
-- Docker: https://docs.docker.com/get-docker/
+- python3+
+- ffmpeg
+- gcc
+- pip
 
 Install
--------
+--------------
+
+```
+git clone https://github.com/Derrick56007/getsub.git
+cd getsub/
+apt-get install -y gcc ffmpeg
+pip install -r requirements.txt
+
+```
+
+Usage
+------------
+
+```
+python run.py files/$VIDEO_FILE.mp4 $LANG
+```
+
+Example
+--------------
+
+```
+python run.py /Users/derrick/videos/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
+```
+
+Docker Requirements
+------------
+
+- Docker: https://docs.docker.com/get-docker/
+
+Docker Install
+--------------
 
 ```
 docker pull derrick56007/getsub:latest
 ```
 
-Usage
------
+Docker Usage
+------------
 
 ```
 docker run -tiv /$VIDEO_DIR:/files derrick56007/getsub:latest /files/$VIDEO_FILE.mp4 $LANG
 ```
 
-Example
--------
+Docker Example
+--------------
 
 ```
 docker run -tiv /Users/derrick/videos:/files derrick56007/getsub:latest /files/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
