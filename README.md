@@ -8,7 +8,7 @@ Introduction
 
 **GetSub** is a tool written in Python to help you **download subtitles in any language** and **sync automatically** using Voice Activity Detection. 
 
-Subtitle search utilizes the [OpenSubtitleDownload.py](https://github.com/emericg/OpenSubtitlesDownload) script written by [emericg](https://github.com/emericg) to precisly **identifying your video files** by computing unique movie hash sums. The subtitles search and download server is [opensubtitles.org](https://www.opensubtitles.org). 
+Subtitle search utilizes the [OpenSubtitleDownload.py](https://github.com/emericg/OpenSubtitlesDownload) script written by [emericg](https://github.com/emericg) to precisely **identifying your video files** and download the correct subtitle. The subtitles search and download server is [opensubtitles.org](https://www.opensubtitles.org).
 
 Features
 --------
@@ -70,3 +70,13 @@ Docker:
 ```
 docker run -tiv /Users/derrick/videos:/files derrick56007/getsub:latest /files/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
 ```
+
+Credits
+-------
+This project would not be possible without the following libraries:
+
+- ffmpeg
+- numpy
+- srt
+- progress
+- webrtcvad
