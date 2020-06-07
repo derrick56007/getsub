@@ -46,27 +46,29 @@ Example
 ```
 python run.py /Users/derrick/videos/Game.of.Thrones.S02E09.1080p.BluRay.x265.10bit.6CH.ReEnc-LUMI.mkv eng
 ```
+GetSub Docker
+=============
 
-Docker Requirements
+Requirements
 ------------
 
 - Docker: https://docs.docker.com/get-docker/
 
-Docker Install
+Install
 --------------
 
 ```
 docker pull derrick56007/getsub:latest
 ```
 
-Docker Usage
+Usage
 ------------
 
 ```
 docker run -tiv /$VIDEO_DIR:/files derrick56007/getsub:latest /files/$VIDEO_FILE.mp4 $LANG
 ```
 
-Docker Example
+Example
 --------------
 
 ```
