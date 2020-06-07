@@ -36,7 +36,6 @@ git clone https://github.com/Derrick56007/getsub.git
 cd getsub/
 apt-get install -y gcc ffmpeg
 pip install -r requirements.txt
-
 ```
 
 Docker:
@@ -75,8 +74,8 @@ Credits
 -------
 This project would not be possible without the following libraries:
 
-- ffmpeg
-- numpy
-- srt
-- progress
-- webrtcvad
+- [ffmpeg](https://ffmpeg.org)
+- [numpy](https://numpy.org)
+- [srt](https://github.com/cdown/srt)
+- [progress](https://github.com/verigak/progress/)
+- [webrtcvad](https://github.com/wiseman/py-webrtcvad)
