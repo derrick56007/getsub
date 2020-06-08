@@ -1,13 +1,12 @@
 import os
 import sys
 import wave
-from ntpath import basename
-from utils import mkdir
 import webrtcvad
 import subprocess
 import contextlib
 import collections
 from progress.bar import Bar
+from utils import mkdir, basename_without_ext
 
 class Frame:
 	""" Represents a 'frame' of audio data"""
@@ -68,12 +67,15 @@ class VoiceDetector:
 
 	def extract_audio(self, in_path):
 		out_dir = "temp/"
-
 		mkdir(out_dir)
 
-		file_name = ".".join(basename(in_path).split(".")[:-1]) + ".wav"
+		file_name = basename_without_ext(in_path) + ".wav"
 		out_path = out_dir + file_name
-		subprocess.call(["ffmpeg", "-nostdin", "-y", "-i", in_path, "-vn", "-acodec", "pcm_s16le", "-ac", "1", "-ar", "16000", out_path])
+
+		command = "ffmpeg -nostdin -y -i {} -vn -acodec pcm_s16le -ac 1 -ar 16000 {}"
+		command_list = command.format(in_path, out_path).split(" ")
+		subprocess.call(command_list)
+
 		print("done extracting")
 		return out_path
 

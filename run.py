@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import os
 import sys
 
 sys.path.insert(0, "src/")
@@ -11,7 +10,7 @@ def main(args):
 	if len(args) != 2:
 		sys.exit("usage: 'video.mp4' 'language'")
 
-	gs = GetSub(0, 30, 300)	
+	gs = GetSub(3, 30, 300)	
 	gs.download(args[0], args[1])
 		
 
