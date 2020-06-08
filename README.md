@@ -75,4 +75,4 @@ This project would not be possible without the following libraries:
 - [numpy](https://numpy.org)
 - [srt](https://github.com/cdown/srt)
 - [progress](https://github.com/verigak/progress/)
-- [webrtcvad](https://github.com/wiseman/py-webrtcvad)
+- [py-webrtcvad](https://github.com/wiseman/py-webrtcvad)
