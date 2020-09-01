@@ -21,7 +21,7 @@ Requirements
 - gcc
 - pip
 
-or if Docker is prefered:
+or if Docker is preferred:
 
 - Docker: https://docs.docker.com/get-docker/
 
