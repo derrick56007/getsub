@@ -20,6 +20,9 @@ Requirements
 - ffmpeg
 - gcc
 - pip
+```
+pip install -r requirements.txt
+```
 
 or if Docker is preferred:
 
