@@ -1,8 +1,15 @@
-FROM derrick56007/getsub:base
+FROM python:3.11-slim
+
+RUN apt-get -qq update \
+    && DEBIAN_FRONTEND=noninteractive apt-get -qq install \
+    gcc ffmpeg
+
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN pip install -qq numpy pandas srt webrtcvad progress 
 
 WORKDIR /app
-COPY src/ /app
-COPY run.py /app
-COPY OpenSubtitlesDownload.py /app
+
+COPY . .
 
 ENTRYPOINT ["python", "run.py"]

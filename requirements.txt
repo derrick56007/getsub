@@ -1,5 +1,0 @@
-srt
-numpy
-pandas
-progress
-webrtcvad

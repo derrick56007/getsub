@@ -5,8 +5,8 @@ import webrtcvad
 import subprocess
 import contextlib
 import collections
-from progress.bar import Bar
 from utils import mkdir, basename_without_ext
+from progress.bar import Bar
 
 class Frame:
 	""" Represents a 'frame' of audio data"""
@@ -95,26 +95,27 @@ class VoiceDetector:
 		frames = list(self.generate_frames(audio, sample_rate))
 
 		with Bar('Detecting Voice Activity', max=len(frames)) as bar:
-			for frame in frames:
-				is_speech = self.vad.is_speech(frame.bytes, sample_rate)
-				ring_buffer.append((frame, is_speech))
+		    for frame in frames:
+			    is_speech = self.vad.is_speech(frame.bytes, sample_rate)
+			    ring_buffer.append((frame, is_speech))
 
-				if not triggered:
-					num_voiced = len([f for f, speech in ring_buffer if speech])
+			    if not triggered:
+				    num_voiced = len([f for f, speech in ring_buffer if speech])
 
-					yield 0
+				    yield 0
 
-					if num_voiced > 0.9 * ring_buffer.maxlen:
-						triggered = True
-						ring_buffer.clear()
+				    if num_voiced > 0.9 * ring_buffer.maxlen:
+					    triggered = True
+					    ring_buffer.clear()
 
-				else:
-					num_unvoiced = len([f for f, speech in ring_buffer if not speech])
+			    else:
+				    num_unvoiced = len([f for f, speech in ring_buffer if not speech])
 
-					yield 1
-					
-					if num_unvoiced > 0.9 * ring_buffer.maxlen:
-						triggered = False
-						ring_buffer.clear()
+				    yield 1
+					    
+				    if num_unvoiced > 0.9 * ring_buffer.maxlen:
+					    triggered = False
+					    ring_buffer.clear()
+					    
+			    bar.next()
 
-				bar.next()
