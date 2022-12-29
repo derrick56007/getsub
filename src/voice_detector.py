@@ -44,7 +44,7 @@ class VoiceDetector:
 			pcm_data = wf.readframes(wf.getnframes())
 			return pcm_data, sample_rate
 
-	def generate_frames(self, audio, sample_rate):
+	def generate_frames(self, audio, n):
 		""" Generates audio frames from PCM (.wav) audio data.
 
 		Takes the desired frame duration in milliseconds, the PCM data, and
@@ -53,18 +53,11 @@ class VoiceDetector:
 		Yields Frames of the requested duration.
 		"""
 
-		n = int(sample_rate * (self.frame_duration_ms / 1000.0) * 2)
 		offset = 0
-		timestamp = 0.0
-		duration = (float(n) / sample_rate) / 2.0
 
-		print('Creating Frames')
-		with tqdm(total=int(len(audio)/n)) as pbar:
-			while offset + n < len(audio):
-				yield Frame(audio[offset:offset + n], timestamp, duration)
-				timestamp += duration
-				offset += n
-				pbar.update(1)
+		while offset + n < len(audio):
+			yield audio[offset:offset + n]
+			offset += n
 
 	def extract_audio(self, in_path):
 		out_dir = "temp/"
@@ -93,11 +86,11 @@ class VoiceDetector:
 		ring_buffer = collections.deque(maxlen=num_padding_frames)
 		triggered = False
 
-		frames = list(self.generate_frames(audio, sample_rate))
+		n = int(sample_rate * (self.frame_duration_ms / 1000.0) * 2)
 
-		print('Detecting Voice Activity')
-		for frame in tqdm(frames, total=len(frames)):
-		    is_speech = self.vad.is_speech(frame.bytes, sample_rate)
+		print('Detecting Voice Activity..')
+		for frame in tqdm(self.generate_frames(audio, n), total=int(len(audio)/n)):
+		    is_speech = self.vad.is_speech(frame, sample_rate)
 		    ring_buffer.append((frame, is_speech))
 
 		    if not triggered:

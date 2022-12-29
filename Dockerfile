@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11.1-slim
 
 RUN apt-get -qq update \
     && DEBIAN_FRONTEND=noninteractive apt-get -qq install \
@@ -6,7 +6,7 @@ RUN apt-get -qq update \
 
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN pip install -qq numpy pandas srt webrtcvad progress tqdm joblib 
+RUN pip install -qq numpy srt webrtcvad tqdm
 
 WORKDIR /app
 
