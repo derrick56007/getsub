@@ -6,7 +6,7 @@ import subprocess
 import contextlib
 import collections
 from utils import mkdir, basename_without_ext
-from progress.bar import Bar
+from tqdm import tqdm
 
 class Frame:
 	""" Represents a 'frame' of audio data"""
@@ -58,12 +58,13 @@ class VoiceDetector:
 		timestamp = 0.0
 		duration = (float(n) / sample_rate) / 2.0
 
-		with Bar('Creating Frames', max=int(len(audio)/n)) as bar:
+		print('Creating Frames')
+		with tqdm(total=int(len(audio)/n)) as pbar:
 			while offset + n < len(audio):
 				yield Frame(audio[offset:offset + n], timestamp, duration)
 				timestamp += duration
 				offset += n
-				bar.next()
+				pbar.update(1)
 
 	def extract_audio(self, in_path):
 		out_dir = "temp/"
@@ -94,28 +95,25 @@ class VoiceDetector:
 
 		frames = list(self.generate_frames(audio, sample_rate))
 
-		with Bar('Detecting Voice Activity', max=len(frames)) as bar:
-		    for frame in frames:
-			    is_speech = self.vad.is_speech(frame.bytes, sample_rate)
-			    ring_buffer.append((frame, is_speech))
+		print('Detecting Voice Activity')
+		for frame in tqdm(frames, total=len(frames)):
+		    is_speech = self.vad.is_speech(frame.bytes, sample_rate)
+		    ring_buffer.append((frame, is_speech))
 
-			    if not triggered:
-				    num_voiced = len([f for f, speech in ring_buffer if speech])
+		    if not triggered:
+			    num_voiced = len([f for f, speech in ring_buffer if speech])
 
-				    yield 0
+			    yield 0
 
-				    if num_voiced > 0.9 * ring_buffer.maxlen:
-					    triggered = True
-					    ring_buffer.clear()
+			    if num_voiced > 0.9 * ring_buffer.maxlen:
+				    triggered = True
+				    ring_buffer.clear()
 
-			    else:
-				    num_unvoiced = len([f for f, speech in ring_buffer if not speech])
+		    else:
+			    num_unvoiced = len([f for f, speech in ring_buffer if not speech])
 
-				    yield 1
-					    
-				    if num_unvoiced > 0.9 * ring_buffer.maxlen:
-					    triggered = False
-					    ring_buffer.clear()
-					    
-			    bar.next()
-
+			    yield 1
+				    
+			    if num_unvoiced > 0.9 * ring_buffer.maxlen:
+				    triggered = False
+				    ring_buffer.clear()

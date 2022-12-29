@@ -6,7 +6,7 @@ RUN apt-get -qq update \
 
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN pip install -qq numpy pandas srt webrtcvad progress 
+RUN pip install -qq numpy pandas srt webrtcvad progress tqdm joblib 
 
 WORKDIR /app
 
